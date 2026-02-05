@@ -240,3 +240,20 @@ h3{ margin:0 0 10px; }
 #aiResultImg.ai-output__img{
   background:#f3f4f6;
 }
+/* Mobile: product-info не должен вылезать за экран */
+@media (max-width: 520px){
+  .product-info{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .product-info .btn{
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .product-info__title{
+    word-break: break-word;
+  }
+}
