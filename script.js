@@ -22,6 +22,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const betaCanvas = document.getElementById("betaCanvas");
   const bctx = betaCanvas?.getContext("2d");
+   // canvas controls (mobile)
+const canvasControls = document.getElementById("canvasControls");
+const sofaXRange = document.getElementById("sofaXRange");
+const sofaYRange = document.getElementById("sofaYRange");
+const sofaScaleRange = document.getElementById("sofaScaleRange");
 
   const tryOtherBtn = document.getElementById("tryOtherBtn");
   const changeRoomBtn = document.getElementById("changeRoomBtn");
@@ -110,6 +115,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (betaCanvas) {
       betaCanvas.classList.add("hidden");
       if (bctx) bctx.clearRect(0, 0, betaCanvas.width, betaCanvas.height);
+      canvasControls?.classList.add("hidden");
+
     }
 
     // reset compare
@@ -171,6 +178,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
     bctx.drawImage(sofaImgObj, x, y, w, h);
   }
+function configureCanvasControlRanges() {
+  if (!betaCanvas || !sofaXRange || !sofaYRange) return;
+
+  // Діапазони зсуву: +- частина розміру canvas, щоб вистачало для реального позиціонування
+  const xMax = Math.round(betaCanvas.width * 0.45);
+  const yMax = Math.round(betaCanvas.height * 0.35);
+
+  sofaXRange.min = String(-xMax);
+  sofaXRange.max = String(xMax);
+
+  sofaYRange.min = String(-yMax);
+  sofaYRange.max = String(yMax);
+}
+
+function syncControlsFromState() {
+  if (!sofaXRange || !sofaYRange || !sofaScaleRange) return;
+
+  sofaXRange.value = String(Math.round(sofaX));
+  sofaYRange.value = String(Math.round(sofaY));
+  sofaScaleRange.value = String(sofaScale);
+}
+
+function showCanvasControlsIfNeeded() {
+  // Показуємо тільки коли custom/canvas режим
+  const shouldShow = selectedRoom === "custom" && !!sofaImgObj && !!roomImgObj;
+
+  if (!canvasControls) return;
+
+  if (shouldShow) {
+    canvasControls.classList.remove("hidden");
+    configureCanvasControlRanges();
+    syncControlsFromState();
+  } else {
+    canvasControls.classList.add("hidden");
+  }
+}
+
+// inputs -> state
+sofaXRange?.addEventListener("input", () => {
+  if (selectedRoom !== "custom") return;
+  sofaX = Number(sofaXRange.value);
+  drawCanvas();
+});
+
+sofaYRange?.addEventListener("input", () => {
+  if (selectedRoom !== "custom") return;
+  sofaY = Number(sofaYRange.value);
+  drawCanvas();
+});
+
+sofaScaleRange?.addEventListener("input", () => {
+  if (selectedRoom !== "custom") return;
+  sofaScale = Number(sofaScaleRange.value);
+  sofaScale = Math.max(0.15, Math.min(1.5, sofaScale));
+  drawCanvas();
+});
 
   // ===== Canvas interactions (custom only) =====
   betaCanvas?.addEventListener("pointerdown", (e) => {
@@ -184,11 +247,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   betaCanvas?.addEventListener("pointermove", (e) => {
-    if (!dragging) return;
-    sofaX = e.clientX - startX;
-    sofaY = e.clientY - startY;
-    drawCanvas();
-  });
+  if (!dragging) return;
+  sofaX = e.clientX - startX;
+  sofaY = e.clientY - startY;
+  drawCanvas();
+  syncControlsFromState();
+});
+
 
   betaCanvas?.addEventListener("pointerup", () => {
     dragging = false;
@@ -209,6 +274,8 @@ document.addEventListener("DOMContentLoaded", () => {
       sofaScale *= delta > 0 ? 0.95 : 1.05;
       sofaScale = Math.max(0.15, Math.min(1.5, sofaScale));
       drawCanvas();
+syncControlsFromState();
+
     },
     { passive: false }
   );
@@ -307,6 +374,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // hide demo img, show canvas
         aiResultImg.classList.add("hidden");
         betaCanvas.classList.remove("hidden");
+        canvasControls?.classList.add("hidden");
+
 
         roomImgObj = await loadImage(customRoomURL);
         const sofaSrc = selectedSofaCanvasSrc;
@@ -325,6 +394,7 @@ if (!sofaSrc) {
 
         fitCanvasToRoom(roomImgObj);
         drawCanvas();
+        showCanvasControlsIfNeeded();
 
         // disable compare for custom (на этом этапе)
         if (compareBtn) {
@@ -454,6 +524,7 @@ if (!sofaSrc) {
 
   updateGenerateButton();
 });
+
 
 
 

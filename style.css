@@ -257,3 +257,131 @@ h3{ margin:0 0 10px; }
     word-break: break-word;
   }
 }
+/* ===== Canvas controls (mobile only, custom/canvas mode) ===== */
+.canvas-controls {
+  width: 100%;
+  max-width: 520px;
+  margin: 12px auto 0;
+  padding: 12px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.06);
+  display: grid;
+  gap: 10px;
+}
+
+.canvas-controls__row {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.canvas-controls__label {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+/* Показувати тільки на мобільних/вузьких екранах */
+@media (min-width: 769px) {
+  .canvas-controls {
+    display: none !important;
+  }
+}
+/* ===== PREMIUM CANVAS CONTROLS ===== */
+
+.canvas-controls {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border-radius: 20px;
+  padding: 16px 16px 18px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* rows */
+.canvas-controls__row {
+  grid-template-columns: 40px 1fr;
+  gap: 14px;
+}
+
+/* labels X Y Zoom */
+.canvas-controls__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+  opacity: 0.65;
+  letter-spacing: 0.02em;
+}
+
+/* ===== RANGE RESET ===== */
+.canvas-controls input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 22px;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* TRACK */
+.canvas-controls input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    #e6e6e6,
+    #dcdcdc
+  );
+  border-radius: 999px;
+}
+
+.canvas-controls input[type="range"]::-moz-range-track {
+  height: 4px;
+  background: #e0e0e0;
+  border-radius: 999px;
+}
+
+/* THUMB (iOS / Apple style) */
+.canvas-controls input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #111;
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+
+  margin-top: -7px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.canvas-controls input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #111;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* ACTIVE / DRAG */
+.canvas-controls input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+/* subtle spacing between sliders */
+.canvas-controls__row + .canvas-controls__row {
+  margin-top: 6px;
+}

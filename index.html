@@ -98,7 +98,7 @@
               <img
                 id="customRoomPreview"
                 class="choice-img js-open-modal"
-                src="image/room-upload-placeholder.jpg"
+                src="image/room-upload-placeholder.jpg.jpg"
                 alt="Ваша кімната"
               />
             </div>
@@ -261,6 +261,24 @@
           <div class="ai-output__grid">
             <img id="aiResultImg" class="ai-output__img js-open-modal" src="" alt="AI результат">
             <canvas id="betaCanvas" class="ai-output__img hidden"></canvas>
+            <!-- Canvas controls (тільки для custom/canvas режиму, на мобільних) -->
+<div id="canvasControls" class="canvas-controls hidden" aria-label="Canvas controls">
+  <div class="canvas-controls__row">
+    <label class="canvas-controls__label" for="sofaXRange">X</label>
+    <input id="sofaXRange" type="range" min="-300" max="300" value="0" step="1">
+  </div>
+
+  <div class="canvas-controls__row">
+    <label class="canvas-controls__label" for="sofaYRange">Y</label>
+    <input id="sofaYRange" type="range" min="-300" max="300" value="0" step="1">
+  </div>
+
+  <div class="canvas-controls__row">
+    <label class="canvas-controls__label" for="sofaScaleRange">Zoom</label>
+    <input id="sofaScaleRange" type="range" min="0.15" max="1.5" value="0.6" step="0.01">
+  </div>
+</div>
+
           </div>
 
           <div class="ai-output__actions">
